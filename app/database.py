@@ -5,7 +5,7 @@ from .settings import settings
 
 engine = create_engine(
     settings.sqlalchemy_database_url,
-    # connect_args={"check_same_thread": False},
+    connect_args={"check_same_thread": False},
 )
 
 Session = sessionmaker(
@@ -18,3 +18,6 @@ Session = sessionmaker(
 def get_db():
     with Session() as session:
         yield session
+
+        if session.in_transaction():
+            session.commit()
